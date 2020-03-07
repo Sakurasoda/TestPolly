@@ -1,4 +1,6 @@
 using System;
+using Polly;
+using Polly.Retry;
 
 namespace TestPolly
 {
@@ -8,25 +10,33 @@ namespace TestPolly
 
         public void Run()
         {
-            var count = 1;
+            Policy.HandleResult(false)
+                .Retry(MaxFailCount,
+                    (result, count) =>
+                    {
+                        Console.WriteLine($"retry -- count : {count}");
+                    })
+                .Execute(GetResult);
+            Console.ReadLine();
 
-            do
-            {
-                var result = GetResult();
+            //var count = 1;
+            //do
+            //{
+            //    var result = GetResult();
 
-                if (!result)
-                {
-                    Console.WriteLine($"retry -- count : {count}");
+            //    if (!result)
+            //    {
+            //        Console.WriteLine($"retry -- count : {count}");
 
-                    count++;
-                }
-                else
-                {
-                    Console.WriteLine("success");
-                    break;
-                }
-            }
-            while (count <= MaxFailCount);
+            //        count++;
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine("success");
+            //        break;
+            //    }
+            //}
+            //while (count <= MaxFailCount);
         }
 
         private bool GetResult()
