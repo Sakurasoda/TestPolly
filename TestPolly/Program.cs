@@ -4,16 +4,16 @@ namespace TestPolly
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             // normal return 
             //new TestCaseA().Run();
 
             // exception
-            new TestCaseB().Run();
+            //new TestCaseB().Run();
 
             // http
-            //await new TestCaseC().Run();
+            await new TestCaseC().Run();
         }
     }
 }
